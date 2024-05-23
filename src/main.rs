@@ -1,7 +1,7 @@
-use actix_web::{web, App, HttpServer};
+use actix_web::{web::Data, App, HttpServer};
 mod db;
-// mod handlers;
-// mod models;
+mod entities;
+mod handlers;
 mod routes;
 
 #[actix_web::main]
@@ -15,7 +15,7 @@ async fn main() -> std::io::Result<()> {
 
     HttpServer::new(move || {
         App::new()
-            .app_data(db_pool.clone())
+            .app_data(Data::new(db_pool.clone()))
             .configure(routes::init_routes)
     })
     .bind("0.0.0.0:8080")?
