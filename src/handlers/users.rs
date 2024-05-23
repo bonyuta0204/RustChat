@@ -1,5 +1,6 @@
 use crate::entities::prelude::User;
 use crate::entities::user::{self};
+use crate::errors::ApiError;
 use actix_web::{web, HttpResponse, Responder};
 use sea_orm::{DatabaseConnection, EntityTrait, Set};
 use serde::Deserialize;
@@ -33,7 +34,7 @@ pub async fn create_user(
 
     let res = User::insert(new_user).exec(db.get_ref()).await;
     match res {
-        Ok(_) => HttpResponse::Ok().body("User created"),
-        Err(_) => HttpResponse::InternalServerError().body("Failed to create user"),
+        Ok(_) => Ok(HttpResponse::Ok().body("User created")),
+        Err(_) => Err(ApiError::InternalServerError),
     }
 }

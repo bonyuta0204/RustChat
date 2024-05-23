@@ -1,5 +1,5 @@
 use crate::handlers::users::{create_user, get_users};
-use actix_web::{web, HttpResponse, Responder};
+use actix_web::web;
 
 pub fn init_routes(cfg: &mut web::ServiceConfig) {
     cfg.service(
