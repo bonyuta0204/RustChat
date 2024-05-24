@@ -14,6 +14,7 @@ Cargo.lock
 *.pdb
 
 frontend/node_modules
+frontend/.env.local
 
 # Added by cargo
 
