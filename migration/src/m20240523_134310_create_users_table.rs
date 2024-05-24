@@ -18,8 +18,10 @@ impl MigrationTrait for Migration {
                             .auto_increment()
                             .primary_key(),
                     )
+                    .col(ColumnDef::new(User::Uid).string().not_null().unique_key())
                     .col(ColumnDef::new(User::Email).string().not_null())
                     .col(ColumnDef::new(User::Name).string().not_null())
+                    .col(ColumnDef::new(User::ProviderId).string().not_null())
                     .col(ColumnDef::new(User::CreatedAt).timestamp().not_null())
                     .col(ColumnDef::new(User::UpdatedAt).timestamp().not_null())
                     .to_owned(),
@@ -38,8 +40,10 @@ impl MigrationTrait for Migration {
 enum User {
     Table,
     Id,
+    Uid,
     Email,
     Name,
+    ProviderId,
     CreatedAt,
     UpdatedAt,
 }

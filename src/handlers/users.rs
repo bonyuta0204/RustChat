@@ -17,6 +17,8 @@ pub async fn get_users(db: web::Data<DatabaseConnection>) -> HttpResponse {
 pub struct CreateUserRequest {
     pub name: String,
     pub email: String,
+    pub provider_id: String,
+    pub uid: String,
 }
 
 pub async fn create_user(
@@ -27,6 +29,8 @@ pub async fn create_user(
     let new_user = user::ActiveModel {
         name: Set(request.name),
         email: Set(request.email),
+        provider_id: Set(request.provider_id),
+        uid: Set(request.uid),
         created_at: Set(chrono::Utc::now().into()),
         updated_at: Set(chrono::Utc::now().into()),
         ..Default::default()
@@ -35,6 +39,9 @@ pub async fn create_user(
     let res = User::insert(new_user).exec(db.get_ref()).await;
     match res {
         Ok(_) => Ok(HttpResponse::Ok().body("User created")),
-        Err(_) => Err(ApiError::InternalServerError),
+        Err(e) => {
+            log::error!("Failed to create user: {:?}", e);
+            Err(ApiError::InternalServerError)
+        }
     }
 }
